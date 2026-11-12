@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rede Social em Grafo — Neo4j</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="https://unpkg.com/vis-network@9.1.9/standalone/umd/vis-network.min.js"></script>
+</head>
+<body>
+<header>
+  <h1>Rede Social <span>em grafo</span></h1>
+  <p>Neo4j · CRUD ao vivo · Projeto 3 de NoSQL</p>
+</header>
+
+<main>
+  <!-- Coluna esquerda: usuários -->
+  <section class="painel" id="painel-usuarios">
+    <h2>Usuários</h2>
+    <ul id="lista-usuarios" class="lista"></ul>
+
+    <h3>Criar usuário <small>(CREATE)</small></h3>
+    <form id="form-criar">
+      <input name="username" placeholder="username (ex.: maria.silva)" required>
+      <input name="nome" placeholder="Nome" required>
+      <input name="cidade" placeholder="Cidade">
+      <input name="bio" placeholder="Bio">
+      <input name="interesses" placeholder="Interesses separados por vírgula">
+      <button type="submit">Criar</button>
+    </form>
+
+    <h3>Graus de separação</h3>
+    <form id="form-caminho" class="linha">
+      <select name="de" class="sel-usuarios"></select>
+      <select name="para" class="sel-usuarios"></select>
+      <button type="submit">Buscar</button>
+    </form>
+    <div id="caminho-resultado"></div>
+  </section>
+
+  <!-- Centro: perfil -->
+  <section class="painel" id="painel-perfil">
+    <div id="perfil-vazio" class="vazio">Selecione um usuário à esquerda.</div>
+    <div id="perfil" hidden>
+      <div class="perfil-topo">
+        <div>
+          <h2 id="p-nome"></h2>
+          <div class="muted">@<span id="p-username"></span> · <span id="p-cidade"></span></div>
+        </div>
+        <button id="btn-excluir" class="perigo">Excluir usuário (DELETE)</button>
+      </div>
+      <p id="p-bio"></p>
+      <div id="p-interesses" class="chips"></div>
+      <div class="muted"><b id="p-seguidores"></b> seguidores · seguindo <b id="p-seguindo"></b></div>
+
+      <h3>Editar <small>(UPDATE)</small></h3>
+      <form id="form-editar">
+        <input name="nome" placeholder="Nome">
+        <input name="cidade" placeholder="Cidade">
+        <input name="bio" placeholder="Bio">
+        <input name="interesses" placeholder="Interesses separados por vírgula">
+        <button type="submit">Salvar alterações</button>
+      </form>
+
+      <h3>Seguindo</h3>
+      <div id="p-lista-seguindo" class="chips"></div>
+      <form id="form-seguir" class="linha">
+        <select name="alvo" class="sel-usuarios"></select>
+        <button type="submit">Seguir</button>
+      </form>
+
+      <h3>Sugestões de quem seguir <small>(amigos de amigos)</small></h3>
+      <ul id="sugestoes" class="lista"></ul>
+
+      <h3>Publicar</h3>
+      <form id="form-post" class="linha">
+        <input name="conteudo" placeholder="O que está acontecendo?" required>
+        <button type="submit">Publicar</button>
+      </form>
+
+      <div class="abas">
+        <button data-aba="posts" class="ativa">Meus posts</button>
+        <button data-aba="feed">Feed</button>
+      </div>
+      <ul id="posts" class="lista posts"></ul>
+    </div>
+  </section>
+
+  <!-- Direita: grafo + cypher -->
+  <section class="painel" id="painel-grafo">
+    <div class="perfil-topo">
+      <h2>Grafo</h2>
+      <button id="btn-grafo">Atualizar</button>
+    </div>
+    <div id="grafo"></div>
+    <div class="legenda">
+      <span class="lg usuario">Usuario</span><span class="lg post">Post</span><span class="lg interesse">Interesse</span>
+    </div>
+    <h3>Cypher executado</h3>
+    <pre id="cypher">—</pre>
+  </section>
+</main>
+
+<div id="toast" hidden></div>
+<script src="/static/app.js"></script>
+</body>
+</html>

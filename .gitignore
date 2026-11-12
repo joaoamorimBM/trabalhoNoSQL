@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# Segredos (credenciais do Neo4j ficam só no .env local)
+.env
+
+# Dados do Neo4j via docker
+neo4j_data/
+
+# Editores / SO
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+~$*
+
+# Configuração local do Claude
+.claude/

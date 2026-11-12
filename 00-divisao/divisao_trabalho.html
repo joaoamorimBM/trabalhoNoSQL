@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Divisão do Trabalho — NoSQL Orientado a Grafo</title>
+<style>
+  @page { size: A4; margin: 12mm 14mm 12mm 14mm; }
+  :root { --ink:#1b2430; --muted:#5b6675; --accent:#2f5bd3; --soft:#eef2fb; --line:#d7deea; }
+  * { box-sizing: border-box; }
+  body { font-family: "Segoe UI", Arial, sans-serif; color: var(--ink); font-size: 10.2pt; line-height: 1.4; margin: 0; background:#fff; }
+  h1 { font-size: 20pt; margin: 0 0 2px; color: var(--accent); }
+  h2 { font-size: 13pt; margin: 18px 0 8px; padding-bottom: 4px; border-bottom: 2px solid var(--accent); }
+  h3 { font-size: 11.5pt; margin: 0 0 4px; }
+  p { margin: 4px 0 8px; }
+  ul { margin: 4px 0 8px 18px; padding: 0; }
+  li { margin: 2px 0; }
+  .sub { color: var(--muted); margin-bottom: 10px; }
+  .facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 10px 0; }
+  .fact { background: var(--soft); border-radius: 6px; padding: 8px 10px; }
+  .fact b { display:block; font-size: 8.5pt; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+  .fact span { font-size: 11.5pt; font-weight: 600; }
+  table { width: 100%; border-collapse: collapse; margin: 6px 0 10px; font-size: 9.8pt; }
+  th, td { border: 1px solid var(--line); padding: 6px 7px; vertical-align: top; text-align: left; }
+  th { background: var(--soft); }
+  tr { page-break-inside: avoid; }
+  table { page-break-inside: avoid; }
+  h2 { page-break-after: avoid; break-after: avoid; }
+  .card { border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 6px; padding: 9px 12px; margin: 0 0 10px; page-break-inside: avoid; }
+  .card .who { display:flex; justify-content: space-between; align-items: baseline; }
+  .tag { font-size: 8.5pt; background: var(--soft); color: var(--accent); padding: 1px 7px; border-radius: 10px; font-weight: 600; }
+  .note { background: #fff8e6; border: 1px solid #f0d9a0; border-radius: 6px; padding: 8px 10px; font-size: 9.8pt; }
+  .break { page-break-before: always; }
+  .small { font-size: 9pt; color: var(--muted); }
+  code { font-family: Consolas, monospace; font-size: 9.3pt; background: #f3f5f9; padding: 0 3px; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<h1>Projeto 3 — Bancos de Dados NoSQL</h1>
+<div class="sub">Equipe (5): João Pedro · Hamilton · Isaac · Luiz · Vinícius<br>Divisão do trabalho · Paradigma sorteado: <b>Orientado a Grafo (graph store)</b></div>
+
+<div class="facts">
+  <div class="fact"><b>Paradigma</b><span>Orientado a Grafo</span></div>
+  <div class="fact"><b>SGBD escolhido</b><span>Neo4j</span></div>
+  <div class="fact"><b>Sistema escolhido</b><span>Rede Social</span></div>
+  <div class="fact"><b>Peso</b><span>40% da nota da disciplina</span></div>
+  <div class="fact"><b>Apresentação</b><span>15 min (slides + CRUD ao vivo)</span></div>
+  <div class="fact"><b>Notas</b><span>Apresentação 6,0 · CRUD 4,0</span></div>
+</div>
+
+<h2>1. O que o trabalho pede</h2>
+<p>Pesquisar o paradigma sorteado, escolher um SGBD desse paradigma e montar uma apresentação para toda a turma
+(comparecimento obrigatório; datas sorteadas; <b>sem prorrogação de prazo</b>). A apresentação deve conter o
+<b>nome de todos os componentes</b> e cobrir no mínimo:</p>
+<ol>
+  <li><b>Paradigma:</b> descrição, características e principais tipos de aplicação (redes sociais etc.).</li>
+  <li><b>Visão geral do SGBD:</b> características, arquitetura, como os nós do cluster são construídos,
+      características dos nós, hardware necessário, configuração média, disponibilidade em nuvem
+      (quais nuvens) e custo de manter uma máquina rodando o banco na nuvem.</li>
+  <li><b>Aplicações reais</b> que usam o SGBD no mercado.</li>
+  <li><b>Vantagens</b> (pontos fortes — motivos para usar).</li>
+  <li><b>Desvantagens</b> (pontos fracos — motivos para evitar).</li>
+  <li><b>Sistema escolhido</b> entre: redes sociais, sistemas de recomendação, chat em tempo real ou lojas
+      virtuais — explicar vantagens/desvantagens do banco nesse contexto e <b>por que</b> usá-lo.</li>
+</ol>
+<p><b>Aplicação prática (4,0):</b> definir a estrutura e os dados do sistema escolhido e fazer, <b>ao vivo na
+apresentação</b>, um CRUD no banco (inserção, consulta, atualização e exclusão), pela interface do banco ou por uma aplicação.</p>
+
+<h2>2. Decisões da equipe</h2>
+<ul>
+  <li><b>SGBD: Neo4j</b> — o banco de grafos mais usado do mercado, linguagem Cypher, versão gratuita
+      (Community) e serviço gerenciado em nuvem (<b>Neo4j AuraDB</b>, com plano Free).</li>
+  <li><b>Sistema: Rede Social</b> — usuários, quem segue quem, posts, curtidas e interesses são naturalmente
+      um grafo. Consultas como "amigos de amigos", "sugestão de quem seguir" e "menor caminho entre duas pessoas"
+      são o ponto forte do paradigma e mostram claramente por que escolhemos grafo.</li>
+  <li><b>Aplicação:</b> app web simples em Python (Flask) + driver oficial do Neo4j, com visualização do grafo.
+      <b>Já pronta e testada</b> (CRUD completo + plano B em Cypher no Neo4j Browser).</li>
+  <li><b>Demo:</b> roda no computador do João Pedro com Neo4j local; o <b>AuraDB Free</b> (nuvem) fica como
+      plano de contingência caso o PC dê problema no dia.</li>
+  <li><b>Repositório:</b> <code>github.com/joaoamorimBM/trabalhoNoSQL</code> — leia o <code>README.md</code>.
+      Quem usar IA (ChatGPT, Claude, Copilot...) deve passar a ela o arquivo <code>CLAUDE.md</code>, que explica o projeto e as regras.</li>
+</ul>
+
+<div style="break-inside: avoid"><h2>3. Resumo da divisão</h2>
+<table>
+  <tr><th style="width:15%">Integrante</th><th style="width:40%">Responsabilidade</th><th>Entregáveis</th><th style="width:11%">Fala</th></tr>
+  <tr><td><b>João Pedro</b></td><td>Aplicação prática — parte técnica (projeto, modelagem do grafo e CRUD)</td>
+      <td>Repositório, app funcionando, scripts Cypher, README; slide da modelagem; executa a demo</td><td>~3 min (demo)</td></tr>
+  <tr><td><b>Hamilton</b></td><td>Tópico 1 — Paradigma orientado a grafo + Tópico 2 (parte A) — Neo4j: características e arquitetura</td>
+      <td>Slides do paradigma e da arquitetura interna do Neo4j; abertura da apresentação</td><td>~3 min</td></tr>
+  <tr><td><b>Isaac</b></td><td>Tópico 2 (parte B) — cluster, nós, hardware, nuvem e custo</td>
+      <td>Slides do cluster (com diagrama), hardware/configuração, tabela de nuvens e custos; revisão do deck final</td><td>~3 min</td></tr>
+  <tr><td><b>Luiz</b></td><td>Tópico 3 — Aplicações reais + Tópicos 4 e 5 — Vantagens e desvantagens</td>
+      <td>Slides de casos reais, prós/contras, comparativo grafo × relacional; referências consolidadas</td><td>~3 min</td></tr>
+  <tr><td><b>Vinícius</b></td><td>Tópico 6 — Rede social com Neo4j + dados e roteiro da demo</td>
+      <td>Slides do tópico 6, ampliação do dataset (seed), roteiro passo a passo da demo + plano B</td><td>~3 min</td></tr>
+</table></div>
+<p class="small">Total previsto: ~15 min (5 × ~3 min). Ordem: Hamilton → Isaac → Luiz → Vinícius → João Pedro (demo).
+Cada um escreve o conteúdo dos seus slides no repositório e apresenta a sua parte; o deck final é montado no fim com visual único.</p>
+
+<h2>4. Detalhamento por integrante</h2>
+
+<div class="card">
+  <div class="who"><h3>João Pedro — Aplicação prática (parte técnica)</h3><span class="tag">CRUD · 4,0 pts</span></div>
+  <ul>
+    <li>Criar o repositório e a estrutura do projeto (Python + Flask + driver Neo4j), README com passo a passo para rodar.</li>
+    <li>Modelar o grafo da rede social: nós <code>Usuario</code>, <code>Post</code>, <code>Interesse</code>;
+        relações <code>SEGUE</code>, <code>PUBLICOU</code>, <code>CURTIU</code>, <code>INTERESSADO_EM</code>; constraints e índices.</li>
+    <li>Implementar o CRUD completo: <b>Create</b> (usuário, post, seguir), <b>Read</b> (perfil, feed, sugestões,
+        menor caminho), <b>Update</b> (dados do usuário/post), <b>Delete</b> (deixar de seguir, excluir post/usuário).</li>
+    <li>Scripts Cypher equivalentes para rodar no Neo4j Browser (plano B da demo).</li>
+    <li>Banco da demo no próprio PC (Neo4j local) + AuraDB Free como contingência; slide da modelagem do grafo e execução da demo.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="who"><h3>Hamilton — Tópico 1: Paradigma + Tópico 2A: Neo4j por dentro</h3><span class="tag">Apresentação</span></div>
+  <ul>
+    <li>O que é um banco orientado a grafo: nós, arestas (relacionamentos), propriedades e rótulos;
+        <i>Property Graph</i> × <i>RDF / triple stores</i>; <i>index-free adjacency</i>; travessias.</li>
+    <li>Diferença para o modelo relacional (JOINs custosos × relacionamentos como cidadãos de primeira classe)
+        e tipos de aplicação: redes sociais, recomendação, fraude, grafos de conhecimento, rotas/logística.</li>
+    <li>Neo4j: histórico, características (ACID, linguagem Cypher e GQL, edições Community × Enterprise, licença).</li>
+    <li>Arquitetura interna: armazenamento nativo de grafos, page cache, transaction log, índices.</li>
+    <li>Abertura da apresentação (apresentar a equipe e o tema).</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="who"><h3>Isaac — Tópico 2B: Cluster, hardware, nuvem e custo</h3><span class="tag">Apresentação</span></div>
+  <ul>
+    <li>Cluster: como os nós são construídos (servidores <i>primary</i> e <i>secondary</i>, consenso Raft,
+        <i>causal consistency</i>, roteamento pelo driver), papéis e características de cada nó, replicação. Diagrama próprio.</li>
+    <li>Hardware necessário e configuração média recomendada (CPU, RAM / heap / page cache, disco SSD, SO, Java).</li>
+    <li>Disponibilidade em nuvem: Neo4j AuraDB (Free, Professional, Business Critical) e marketplaces AWS, Google Cloud e Azure.</li>
+    <li>Custo estimado de uma máquina rodando o banco (tabela AuraDB × VM própria). Citar fonte e data da consulta.</li>
+    <li>Extra: revisar o deck final montado e cronometrar o ensaio geral.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="who"><h3>Luiz — Tópico 3: Aplicações reais + Tópicos 4 e 5: Vantagens e desvantagens</h3><span class="tag">Apresentação</span></div>
+  <ul>
+    <li>Aplicações reais: empresas que usam Neo4j (ex.: eBay, Walmart, NASA, Adobe, Airbnb, UBS, Panama Papers/ICIJ) e para quê.</li>
+    <li>Vantagens: desempenho em consultas com muitos relacionamentos, esquema flexível, Cypher expressivo,
+        ACID, visualização, ecossistema (GDS, APOC, Bloom), comunidade.</li>
+    <li>Desvantagens: escalabilidade horizontal de escrita (sharding limitado), custo da edição Enterprise,
+        curva de aprendizado, não ideal para agregações em massa/dados tabulares, consumo de memória.</li>
+    <li>Quadro comparativo grafo × relacional × documento (quando usar e quando evitar).</li>
+    <li>Extra: consolidar o slide final de referências bibliográficas de toda a equipe.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="who"><h3>Vinícius — Tópico 6: Rede social com Neo4j + dados e roteiro da demo</h3><span class="tag">Apresentação + CRUD</span></div>
+  <ul>
+    <li>Justificar a escolha da rede social: por que grafo, vantagens e desvantagens do Neo4j <b>nesse sistema</b>
+        (ex.: sugestão de amigos, feed, graus de separação) e como seria em um banco relacional.</li>
+    <li>Ampliar o conjunto de dados de exemplo (arquivo <code>07-aplicacao-pratica/cypher/02_seed.cypher</code>) com dados realistas.</li>
+    <li>Roteiro passo a passo da demo ao vivo (o que inserir, consultar, alterar e excluir; falas de cada passo)
+        e testar o plano B no Neo4j Browser junto com o João Pedro.</li>
+    <li>Fazer a transição dos slides para a demo.</li>
+  </ul>
+</div>
+
+<h2>5. Regras e combinados</h2>
+<ul>
+  <li>Cada um pesquisa, escreve e <b>apresenta</b> a própria parte, com fontes citadas.</li>
+  <li><b>Repositório organizado por tópico:</b> <code>01-paradigma</code>, <code>02a-neo4j-arquitetura</code> (Hamilton) · <code>02b-cluster-hardware-nuvem</code> (Isaac) · <code>03-aplicacoes-reais</code>, <code>04-05-vantagens-desvantagens</code> (Luiz) · <code>06-rede-social</code> (Vinícius) · <code>07-aplicacao-pratica</code> (João Pedro) · <code>08-slides</code> (deck final). Cada um mexe só na sua pasta e envia por branch + pull request.</li>
+  <li><b>Slides:</b> cada um escreve o <code>conteudo.md</code> da sua pasta (tópicos de cada slide, fala, imagens e fontes). Quando tudo estiver no repositório, o deck único é gerado a partir desses arquivos, com o mesmo visual para todos; cada um revisa o próprio trecho.</li>
+  <li>Marcos internos: <b>(1)</b> pesquisa e rascunho dos slides; <b>(2)</b> slides finais + app funcionando;
+      <b>(3)</b> ensaio geral cronometrado (15 min) com a demo — antes da data sorteada.</li>
+  <li>Se alguém travar, avisa cedo no grupo para redistribuir. <b>Não há prorrogação de prazo.</b></li>
+</ul>
+
+</body>
+</html>

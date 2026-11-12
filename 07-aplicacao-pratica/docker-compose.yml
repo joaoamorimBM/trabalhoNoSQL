@@ -1,0 +1,14 @@
+# Sobe um Neo4j local para desenvolvimento/demonstração.
+#   docker compose up -d
+#   Neo4j Browser: http://localhost:7474  (usuário neo4j / senha definida em NEO4J_PASSWORD do .env)
+services:
+  neo4j:
+    image: neo4j:5-community
+    container_name: rede-social-neo4j
+    ports:
+      - "7474:7474"   # Neo4j Browser (HTTP)
+      - "7687:7687"   # Bolt (driver)
+    environment:
+      NEO4J_AUTH: neo4j/${NEO4J_PASSWORD:-troque-esta-senha}
+    volumes:
+      - ./neo4j_data:/data
