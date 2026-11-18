@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 490" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="seta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#a04000"/>
+    </marker>
+    <marker id="setaW" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#c0392b"/>
+    </marker>
+    <marker id="setaR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2471a3"/>
+    </marker>
+  </defs>
+  <rect width="900" height="490" fill="#ffffff"/>
+  <text x="450" y="34" text-anchor="middle" font-size="22" font-weight="bold" fill="#222">Cluster Neo4j (Enterprise Edition)</text>
+
+  <!-- Aplicação / driver -->
+  <rect x="305" y="50" width="290" height="74" rx="10" fill="#f4f4f4" stroke="#555"/>
+  <text x="450" y="80" text-anchor="middle" font-size="17" font-weight="bold" fill="#222">Aplicação (Flask)</text>
+  <text x="450" y="104" text-anchor="middle" font-size="14" fill="#444">driver · neo4j://  (tabela de roteamento)</text>
+
+  <!-- Grupo Raft -->
+  <text x="40" y="162" font-size="14" font-weight="bold" fill="#a04000">Primários · Raft (M = 2F + 1)</text>
+  <rect x="40" y="170" width="520" height="190" rx="14" fill="#fdf2e9" stroke="#e67e22" stroke-dasharray="6 4"/>
+
+  <circle cx="300" cy="275" r="52" fill="#c0392b"/>
+  <text x="300" y="271" text-anchor="middle" font-size="16" font-weight="bold" fill="#fff">Líder</text>
+  <text x="300" y="291" text-anchor="middle" font-size="12" fill="#fff">recebe escritas</text>
+
+  <circle cx="130" cy="275" r="46" fill="#e67e22"/>
+  <text x="130" y="271" text-anchor="middle" font-size="15" font-weight="bold" fill="#fff">Seguidor</text>
+  <text x="130" y="290" text-anchor="middle" font-size="12" fill="#fff">vota / replica</text>
+
+  <circle cx="470" cy="275" r="46" fill="#e67e22"/>
+  <text x="470" y="271" text-anchor="middle" font-size="15" font-weight="bold" fill="#fff">Seguidor</text>
+  <text x="470" y="290" text-anchor="middle" font-size="12" fill="#fff">vota / replica</text>
+
+  <!-- replica (líder → seguidores) e ack (seguidores → líder) -->
+  <line x1="250" y1="262" x2="174" y2="262" stroke="#a04000" stroke-width="2.5" marker-end="url(#seta)"/>
+  <line x1="350" y1="262" x2="426" y2="262" stroke="#a04000" stroke-width="2.5" marker-end="url(#seta)"/>
+  <line x1="174" y1="290" x2="250" y2="290" stroke="#a04000" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#seta)"/>
+  <line x1="426" y1="290" x2="350" y2="290" stroke="#a04000" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#seta)"/>
+  <text x="212" y="252" text-anchor="middle" font-size="13" fill="#a04000">replica</text>
+  <text x="212" y="309" text-anchor="middle" font-size="13" fill="#a04000">ack</text>
+  <text x="388" y="252" text-anchor="middle" font-size="13" fill="#a04000">replica</text>
+  <text x="388" y="309" text-anchor="middle" font-size="13" fill="#a04000">ack</text>
+  <text x="300" y="350" text-anchor="middle" font-size="13" fill="#a04000">commit = maioria dos primários registra no log (2 de 3)</text>
+
+  <!-- Secundários -->
+  <rect x="610" y="170" width="250" height="300" rx="14" fill="#eaf2f8" stroke="#2471a3" stroke-dasharray="6 4"/>
+  <text x="845" y="194" text-anchor="end" font-size="14" font-weight="bold" fill="#1a5276">Secundários (leitura)</text>
+  <rect x="650" y="220" width="170" height="70" rx="10" fill="#2471a3"/>
+  <text x="735" y="252" text-anchor="middle" font-size="15" font-weight="bold" fill="#fff">Secundário 1</text>
+  <text x="735" y="272" text-anchor="middle" font-size="12" fill="#fff">cópia assíncrona</text>
+  <rect x="650" y="320" width="170" height="70" rx="10" fill="#2471a3"/>
+  <text x="735" y="352" text-anchor="middle" font-size="15" font-weight="bold" fill="#fff">Secundário 2</text>
+  <text x="735" y="372" text-anchor="middle" font-size="12" fill="#fff">cópia assíncrona</text>
+  <text x="735" y="430" text-anchor="middle" font-size="12" fill="#a04000">puxam o transaction log</text>
+  <text x="735" y="446" text-anchor="middle" font-size="12" fill="#a04000">de um primário (assíncrono · não votam)</text>
+
+  <line x1="562" y1="255" x2="646" y2="255" stroke="#a04000" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#seta)"/>
+  <line x1="562" y1="330" x2="646" y2="352" stroke="#a04000" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#seta)"/>
+
+  <!-- Setas da aplicação -->
+  <line x1="420" y1="124" x2="320" y2="220" stroke="#c0392b" stroke-width="3" marker-end="url(#setaW)"/>
+  <text x="346" y="212" font-size="12" font-weight="bold" fill="#c0392b">ESCRITA → líder</text>
+  <line x1="390" y1="124" x2="160" y2="227" stroke="#2471a3" stroke-width="2.5" marker-end="url(#setaR)"/>
+  <line x1="480" y1="124" x2="471" y2="226" stroke="#2471a3" stroke-width="2.5" marker-end="url(#setaR)"/>
+  <line x1="540" y1="124" x2="700" y2="166" stroke="#2471a3" stroke-width="3" marker-end="url(#setaR)"/>
+  <text x="604" y="100" font-size="13" font-weight="bold" fill="#2471a3">LEITURA → seguidores + secundários</text>
+
+  <!-- Legenda -->
+  <text x="40" y="400" font-size="13" fill="#333">Banco <tspan font-weight="bold">social</tspan>: 3 PRIMARIES + 2 SECONDARIES = 5 servidores (uma cópia em cada)</text>
+  <text x="40" y="440" font-size="11" fill="#777">Fonte: Neo4j Operations Manual — Clustering (acessado em 18/11/2026) · diagrama próprio</text>
+</svg>
