@@ -5,8 +5,8 @@
 ## O que cobrir
 - [ ] Por que grafo numa rede social: vantagens e desvantagens do Neo4j **nesse sistema**
 - [ ] Comparar com o relacional (ex.: sugestão de amigos = vários self-JOINs; graus de separação = SQL recursivo)
-- [ ] Ampliar o dataset em [`07-aplicacao-pratica/cypher/02_seed.cypher`](../07-aplicacao-pratica/cypher/02_seed.cypher) (não usar ponto e vírgula dentro dos textos)
-- [ ] Escrever o roteiro da demo em `roteiro-demo.md` (passo a passo do CRUD + falas)
+- [x] Ampliar o dataset em [`07-aplicacao-pratica/cypher/02_seed.cypher`](../07-aplicacao-pratica/cypher/02_seed.cypher) (não usar ponto e vírgula dentro dos textos) — 30 usuários, 18 interesses, 60 posts, 111 SEGUE, 136 curtidas
+- [x] Escrever o roteiro da demo em `roteiro-demo.md` (passo a passo do CRUD + falas)
 - [ ] Testar o plano B ([`03_crud_demo.cypher`](../07-aplicacao-pratica/cypher/03_crud_demo.cypher)) no Neo4j Browser junto com o João Pedro
 
 ## O que entregar nesta pasta
